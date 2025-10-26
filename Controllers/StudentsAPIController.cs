@@ -9,10 +9,19 @@ namespace StudentAPIProject.Controllers
     [ApiController]
     public class StudentsAPIController : ControllerBase
     {
-        [HttpGet]
+        [HttpGet("All" , Name = "GetAllStudents")]
         public ActionResult<IEnumerable<Student>> GetAllStudents()
         {
             return Ok(StudentsDataSimulation.Students);
         }
+        [HttpGet("Passed" , Name ="PassedStudents")]
+
+        public ActionResult<IEnumerable<Student>> GetPassedStudents()
+        {
+            var PassedStudents = StudentsDataSimulation.Students.Where(student => student.Grade > 15);
+            return Ok(PassedStudents);
+        }
+
+
     }
 }
