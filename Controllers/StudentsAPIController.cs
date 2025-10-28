@@ -105,5 +105,32 @@ namespace StudentAPIProject.Controllers
             return CreatedAtRoute("GetStudentByID", new { id = NewStudent.ID }, NewStudent);
         }
 
+        [HttpDelete("{id}", Name = "Delete Student by ID")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+        public ActionResult<Student>DeleteStudentByID(int id)
+        {
+            if (id<1)
+            {
+                return BadRequest("Bad request");
+            }
+            else
+            {
+                var StudentID = StudentsDataSimulation.Students.FirstOrDefault(s => s.ID == id);
+                if (StudentID==null)
+                {
+                    return NotFound("Not found");
+                }
+                else
+                {
+                    return Ok(StudentID);
+                }
+
+            }
+
+        }
+
     }
 }
