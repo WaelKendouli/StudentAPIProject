@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentAPIProject.DataSimulation;
 using StudentAPIProject.Modles;
+using System.ComponentModel.Design;
 
 namespace StudentAPIProject.Controllers
 {
@@ -131,6 +132,32 @@ namespace StudentAPIProject.Controllers
             }
 
         }
+        [HttpPut("{id}", Name = "Update student by ID")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
 
+        public ActionResult<Student> UpdateStudentByID(int id, Student UpdatedStudents)
+        {
+            if (id < 0 || UpdatedStudents == null ||string.IsNullOrEmpty(UpdatedStudents.Name) || UpdatedStudents.Age <= 0 || UpdatedStudents.Grade < 0)
+            {
+                return BadRequest("Invalid Request");
+            }
+            else
+            {
+                var Student = StudentsDataSimulation.Students.FirstOrDefault(s => s.ID == id);
+                if (Student==null)
+                {
+                    return NotFound("Not found");
+                }
+                else
+                {
+                    Student.Age = UpdatedStudents.Age;
+                    Student.Name = UpdatedStudents.Name;
+                    Student.Grade = UpdatedStudents.Grade;
+                    return Ok(Student);
+                }
+            }
+        }
     }
 }
