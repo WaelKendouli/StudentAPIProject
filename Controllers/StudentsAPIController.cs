@@ -81,7 +81,29 @@ namespace StudentAPIProject.Controllers
             }
 
         }
+        [HttpPost(Name = "AddNewStudent")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
+        public ActionResult<Student> AddNewStudent(Student NewStudent)
+        {
+            if (string.IsNullOrEmpty(NewStudent.Name)|| NewStudent.ID <= 0 || NewStudent.Age < 0 || NewStudent.Grade <0)
+            {
+                return BadRequest("Invalid input");
+
+            }
+            if (StudentsDataSimulation.Students.Count > 0)
+            {
+             NewStudent.ID = Convert.ToInt16(StudentsDataSimulation.Students.Max(s => s.ID) + 1);
+  
+            }
+            else
+            {
+                NewStudent.ID = 1;
+            }
+            StudentsDataSimulation.Students.Add(NewStudent);
+            return CreatedAtRoute("GetStudentByID", new { id = NewStudent.ID }, NewStudent);
+        }
 
     }
 }
